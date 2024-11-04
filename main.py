@@ -1,36 +1,17 @@
-import pygame
-import tkinter.messagebox as messagebox
-from board import draw_game, begin, state
-from  event_handler import handle_events
-import check
+import tkinter as tk
+from initialize_interface import TicTacToeInterface
+from player_input import PlayerInput
 
-# 初始化游戏
-pygame.init()
-width, height = 480, 480
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("井字棋")
+def main():
+    root = tk.Tk()
+    interface = TicTacToeInterface(root)
+    player_input = PlayerInput(interface)
 
-# 插入图片
-try:
-    background = pygame.image.load("F:\\GitHub\\Tic_tac_toe\\TicTacToe.jpg")
-except FileNotFoundError:
-    print("背景图片未找到，请确保图片位于正确位置或提供正确的路径。")
-    exit(1)
+    for i in range(3):
+        for j in range(3):
+            interface.buttons[i][j].config(command=lambda row=i, col=j: player_input.handle_click(row, col))
 
-begin(screen)
+    root.mainloop()
 
-# 主循环
-while True:
-    event = pygame.event.wait()
-    handle_events(event, screen)
-
-    # 判断获胜者
-    winner = check.check_winner(state)
-    if winner == -1:
-        messagebox.showinfo(title='Win', message='You win!')
-        pygame.quit()
-        exit(0)
-    elif winner == 1:
-        messagebox.showinfo(title='Lose', message='You lose!')
-        pygame.quit()
-        exit(0)
+if __name__ == "__main__":
+    main()

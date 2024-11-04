@@ -2,10 +2,11 @@ import pygame
 from random import randint
 import tkinter.messagebox as messagebox
 from pygame.locals import *
+import check
 
 # 初始化游戏
 pygame.init()
-width, height = 480, 480
+width, height = 480,480
 
 # 创建屏幕并保存到变量中
 screen = pygame.display.set_mode((width, height))
@@ -15,7 +16,7 @@ pygame.display.set_caption("井字棋")
 
 # 插入图片
 try:
-    background = pygame.image.load("C:/Users/王世伟/PycharmProjects/pythonProject1/bjt.png")
+    background = pygame.image.load("F:\\GitHub\\Tic_tac_toe\\TicTacToe.jpg")
 except FileNotFoundError:
     print("背景图片未找到，请确保图片位于正确位置或提供正确的路径。")
     exit(1)
@@ -66,31 +67,6 @@ def draw_O():
             break
     draw_game()
 
-
-# 检查是否获胜
-def is_won():
-    for val in range(3):
-        # 检查行
-        if all(state[row][val] == state[row + 1][val] == state[row + 2][val] != empty
-               for row in range(3)):
-            return state[0][val]
-
-            # 检查列
-        if all(state[val][row] == state[val][row + 1] == state[val][row + 2] != empty
-               for row in range(3)):
-            return state[val][0]
-
-            # 检查对角线
-    if all(state[i][i] == state[i + 1][i + 1] == state[i + 2][i + 2] != empty
-           for i in range(3)):
-        return state[1][1]
-    if all(state[i][2 - i] == state[i + 1][1 - i] == state[i + 2][0 - i] != empty
-           for i in range(3)):
-        return state[1][1]
-
-    return None
-
-
 # 初始化棋盘并开始游戏
 def begin():
     global state
@@ -123,7 +99,7 @@ while True:
             draw_O()
 
             # 判断获胜者
-            winner = is_won()
+            winner = check.check_winner(state)
             if winner == -1:
                 messagebox.showinfo(title='Win', message='You win!')
                 pygame.quit()
