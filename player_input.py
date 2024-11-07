@@ -35,10 +35,11 @@ class PlayerInput:
 
     def handle_click(self, row, col):
         button = self.interface.buttons[row][col]
-        if button['text'] == '':
+        if button['text'] == '': #如果点击的是空格
             button.config(text=self.current_player)
             self.process_turn(row, col)
 
+            # 如果是AI模式并且轮到AI，则让AI下棋
             if self.ai_enabled and self.current_player == "O":
                 self.handle_ai_turn()
 
@@ -61,7 +62,16 @@ class PlayerInput:
             self.switch_player()
 
     def switch_player(self):
-        self.current_player = "O" if self.current_player == "X" else "X"
+        """切换当前玩家"""
+        if self.ai_enabled:
+            # AI模式下，玩家和AI之间切换
+            self.current_player = "O" if self.current_player == "X" else "X"
+        else:
+            # 双人对战模式下，普通切换
+            if self.current_player == "X":
+                self.current_player = "O"
+            else:
+                self.current_player = "X"
 
     def end_game(self, message):
         """结束游戏并显示结果"""
